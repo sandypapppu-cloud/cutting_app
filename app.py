@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from flask import Flask, render_template, request, redirect, session, send_file
 import psycopg2
 import os
@@ -240,7 +239,6 @@ def export():
 # ---------------- RUN ----------------
 if __name__ == "__main__":
     app.run()
-=======
 from flask import Flask, render_template, request, redirect, session, send_file
 import psycopg2
 import os
@@ -485,4 +483,3 @@ def export():
 # ---------------- RUN ----------------
 if __name__ == "__main__":
     app.run()
->>>>>>> 2b7f2534638bcddfc36075380d1e1b62ad6f64de
