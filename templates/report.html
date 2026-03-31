@@ -1,21 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Report</title>
+<title>Report</title>
+
+<style>
+body { font-family: Arial; background:#f4f6f9; padding:20px;}
+table { width:100%; border-collapse:collapse;}
+th, td { border:1px solid #ccc; padding:8px;}
+th { background:#007bff; color:white;}
+button { padding:5px;}
+</style>
+
 </head>
 <body>
 
-<h2>PROGRAM REPORT</h2>
+<h2>Cutting Program Report</h2>
 
-<table border="1">
+<form method="GET">
+<select name="status">
+<option value="ALL">ALL</option>
+<option value="PENDING">PENDING</option>
+<option value="PARTIAL">PARTIAL</option>
+<option value="COMPLETED">COMPLETED</option>
+</select>
+<button>Filter</button>
+</form>
+
+<br>
+
+<a href="/export">Download Excel</a>
+
+<table>
 <tr>
 <th>ID</th>
 <th>Program</th>
 <th>Fabric</th>
 <th>Colour</th>
+<th>Size</th>
 <th>Status</th>
-<th>Date</th>
-<th>Update Status</th>
+<th>Update</th>
 </tr>
 
 {% for row in data %}
@@ -24,19 +47,17 @@
 <td>{{row[1]}}</td>
 <td>{{row[2]}}</td>
 <td>{{row[6]}}</td>
+<td>{{row[7]}}</td>
 <td>{{row[10]}}</td>
-<td>{{row[11]}}</td>
-
 <td>
 <form method="POST" action="/status/{{row[0]}}">
 <select name="status" onchange="this.form.submit()">
-<option value="PENDING" {% if row[10]=='PENDING' %}selected{% endif %}>PENDING</option>
-<option value="PARTIAL" {% if row[10]=='PARTIAL' %}selected{% endif %}>PARTIAL</option>
-<option value="COMPLETED" {% if row[10]=='COMPLETED' %}selected{% endif %}>COMPLETED</option>
+<option>PENDING</option>
+<option>PARTIAL</option>
+<option>COMPLETED</option>
 </select>
 </form>
 </td>
-
 </tr>
 {% endfor %}
 </table>

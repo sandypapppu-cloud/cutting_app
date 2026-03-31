@@ -7,12 +7,9 @@ app.secret_key = "secret123"
 
 # ---------------- DB CONNECTION ----------------
 def get_conn():
-    return psycopg2.connect(
-        os.environ.get("DATABASE_URL"),
-        sslmode="require"
-    )
+    return psycopg2.connect(os.environ.get("DATABASE_URL"), sslmode="require")
 
-# ---------------- INIT DB ----------------
+# ---------------- INIT DB (AUTO FIX INCLUDED) ----------------
 def init_db():
     conn = get_conn()
     cur = conn.cursor()
@@ -34,6 +31,9 @@ def init_db():
         date TEXT
     )
     """)
+
+    # 🔥 AUTO FIX (IMPORTANT)
+    cur.execute("ALTER TABLE programs ADD COLUMN IF NOT EXISTS date TEXT")
 
     # MASTER TABLES
     cur.execute("CREATE TABLE IF NOT EXISTS fabric_master(name TEXT UNIQUE)")
@@ -57,7 +57,13 @@ def init_db():
     conn.commit()
     conn.close()
 
-init_db()
+# 🔥 RUN INIT EVERY REQUEST (SAFE)
+@app.before_request
+def before():
+    try:
+        init_db()
+    except:
+        pass
 
 # ---------------- LOGIN ----------------
 @app.route("/", methods=["GET","POST"])
@@ -77,22 +83,18 @@ def dashboard():
 # ---------------- MASTER ----------------
 @app.route("/master", methods=["GET","POST"])
 def master():
-
     if "user" not in session:
         return redirect("/")
 
     conn = get_conn()
     cur = conn.cursor()
 
-    # ADD MASTER DATA
     if request.method == "POST":
         table = request.form["type"]
         name = request.form["name"]
-
         cur.execute(f"INSERT INTO {table}(name) VALUES (%s) ON CONFLICT DO NOTHING",(name,))
         conn.commit()
 
-    # FETCH MASTER DATA
     cur.execute("SELECT * FROM fabric_master")
     fabrics = cur.fetchall()
 
@@ -106,10 +108,9 @@ def master():
 
     return render_template("master.html", fabrics=fabrics, sizes=sizes, colours=colours)
 
-# ---------------- ADD CODE MASTER ----------------
+# ADD CODE MASTER
 @app.route("/add_code", methods=["POST"])
 def add_code():
-
     conn = get_conn()
     cur = conn.cursor()
 
@@ -117,18 +118,17 @@ def add_code():
     INSERT INTO code_master(code,fabric,gsm,dia,ptype,sizes,colours)
     VALUES (%s,%s,%s,%s,%s,%s,%s)
     """, (
-        request.form["code"],
-        request.form["fabric"],
-        request.form["gsm"],
-        request.form["dia"],
-        request.form["ptype"],
-        request.form["sizes"],
-        request.form["colours"]
+        request.form.get("code",""),
+        request.form.get("fabric",""),
+        request.form.get("gsm",""),
+        request.form.get("dia",""),
+        request.form.get("ptype",""),
+        request.form.get("sizes",""),
+        request.form.get("colours","")
     ))
 
     conn.commit()
     conn.close()
-
     return redirect("/master")
 
 # ---------------- PROGRAM ----------------
@@ -141,7 +141,6 @@ def program():
     conn = get_conn()
     cur = conn.cursor()
 
-    # SAVE PROGRAM
     if request.method == "POST":
         program_no = "CP" + str(random.randint(1000,9999))
         date = datetime.now().strftime("%d-%m-%Y")
@@ -152,25 +151,23 @@ def program():
         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         """, (
             program_no,
-            request.form["fabric"],
-            request.form["dia"],
-            request.form["ptype"],
-            request.form["code"],
-            request.form["colour"],
-            request.form["size"],
-            request.form["ratio"],
-            request.form["roll"],
+            request.form.get("fabric",""),
+            request.form.get("dia",""),
+            request.form.get("ptype",""),
+            request.form.get("code",""),
+            request.form.get("colour",""),
+            request.form.get("size",""),
+            request.form.get("ratio",""),
+            request.form.get("roll",""),
             "PENDING",
             date
         ))
 
         conn.commit()
 
-    # FETCH PROGRAM DATA
     cur.execute("SELECT * FROM programs ORDER BY id DESC")
     data = cur.fetchall()
 
-    # LOAD CODE LIST
     cur.execute("SELECT code FROM code_master")
     codes = [x[0] for x in cur.fetchall()]
 
@@ -178,10 +175,9 @@ def program():
 
     return render_template("program.html", data=data, codes=codes)
 
-# ---------------- GET CODE DETAILS ----------------
+# AUTO FILL
 @app.route("/get_code/<code>")
 def get_code(code):
-
     conn = get_conn()
     cur = conn.cursor()
 
@@ -190,32 +186,27 @@ def get_code(code):
 
     conn.close()
 
-    if row:
-        return jsonify({
-            "fabric": row[2],
-            "dia": row[4]
-        })
-    else:
-        return jsonify({})
+    if not row:
+        return jsonify({"fabric":"","dia":""})
 
-# ---------------- DELETE PROGRAM ----------------
+    return jsonify({
+        "fabric": row[2],
+        "dia": row[4]
+    })
+
+# DELETE
 @app.route("/delete/<int:id>")
 def delete(id):
-
     conn = get_conn()
     cur = conn.cursor()
-
     cur.execute("DELETE FROM programs WHERE id=%s",(id,))
-
     conn.commit()
     conn.close()
-
     return redirect("/program")
 
 # ---------------- REPORT ----------------
 @app.route("/report")
 def report():
-
     if "user" not in session:
         return redirect("/")
 
@@ -225,20 +216,18 @@ def report():
     status = request.args.get("status")
 
     if status and status != "ALL":
-        cur.execute("SELECT * FROM programs WHERE status=%s ORDER BY id DESC",(status,))
+        cur.execute("SELECT * FROM programs WHERE status=%s",(status,))
     else:
         cur.execute("SELECT * FROM programs ORDER BY id DESC")
 
     data = cur.fetchall()
-
     conn.close()
 
     return render_template("report.html", data=data)
 
-# ---------------- STATUS UPDATE ----------------
+# STATUS
 @app.route("/status/<int:id>", methods=["POST"])
 def update_status(id):
-
     conn = get_conn()
     cur = conn.cursor()
 
@@ -247,17 +236,13 @@ def update_status(id):
 
     conn.commit()
     conn.close()
-
     return redirect("/report")
 
-# ---------------- EXPORT EXCEL ----------------
+# EXPORT
 @app.route("/export")
 def export():
-
     conn = get_conn()
-
     df = pd.read_sql("SELECT * FROM programs", conn)
-
     conn.close()
 
     file = "cutting_report.xlsx"
@@ -265,12 +250,11 @@ def export():
 
     return send_file(file, as_attachment=True)
 
-# ---------------- LOGOUT ----------------
+# LOGOUT
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/")
 
-# ---------------- RUN ----------------
 if __name__ == "__main__":
     app.run()

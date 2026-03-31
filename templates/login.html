@@ -1,11 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+
+<style>
+body {
+    font-family: Arial;
+    background:#f4f6f9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card {
+    background:white;
+    padding:30px;
+    border-radius:8px;
+    width:300px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+}
+
+button {
+    width:100%;
+    padding:10px;
+    background:#007bff;
+    color:white;
+    border:none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
 <h2>Login</h2>
 
 <form method="POST">
-    Username:<br>
-    <input name="username"><br><br>
-
-    Password:<br>
-    <input type="password" name="password"><br><br>
-
-    <button>Login</button>
+<input name="username" placeholder="Username">
+<input type="password" name="password" placeholder="Password">
+<button>Login</button>
 </form>
+
+</div>
+
+</body>
+</html>

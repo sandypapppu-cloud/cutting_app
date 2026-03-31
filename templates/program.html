@@ -1,4 +1,21 @@
-<h2>CUTTING PROGRAM SHEET</h2>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Program</title>
+
+<style>
+body { font-family: Arial; background:#f4f6f9; padding:20px;}
+input, select { padding:8px; margin:5px;}
+button { background:#007bff; color:white; padding:8px;}
+table { width:100%; border-collapse:collapse; margin-top:20px;}
+th, td { border:1px solid #ccc; padding:8px;}
+th { background:#007bff; color:white;}
+</style>
+
+</head>
+<body>
+
+<h2>Cutting Program Sheet</h2>
 
 <form method="POST">
 
@@ -7,16 +24,16 @@ Code:
 {% for c in codes %}
 <option value="{{c}}">{{c}}</option>
 {% endfor %}
-</select><br><br>
+</select><br>
 
-Fabric: <input name="fabric"><br><br>
-DIA: <input name="dia"><br><br>
-Type: <input name="ptype"><br><br>
+Fabric: <input name="fabric"><br>
+DIA: <input name="dia"><br>
+Type: <input name="ptype"><br>
 
-Colour: <input name="colour"><br><br>
-Size: <input name="size"><br><br>
-Ratio: <input name="ratio"><br><br>
-Roll: <input name="roll"><br><br>
+Colour: <input name="colour"><br>
+Size: <input name="size"><br>
+Ratio: <input name="ratio"><br>
+Roll: <input name="roll"><br>
 
 <button>Save</button>
 
@@ -24,9 +41,7 @@ Roll: <input name="roll"><br><br>
 
 <hr>
 
-<h3>PROGRAM LIST</h3>
-
-<table border="1">
+<table>
 <tr>
 <th>ID</th>
 <th>Program</th>
@@ -45,9 +60,7 @@ Roll: <input name="roll"><br><br>
 <td>{{row[6]}}</td>
 <td>{{row[7]}}</td>
 <td>{{row[10]}}</td>
-<td>
-<a href="/delete/{{row[0]}}">Delete</a>
-</td>
+<td><a href="/delete/{{row[0]}}">Delete</a></td>
 </tr>
 {% endfor %}
 </table>
@@ -62,3 +75,6 @@ document.getElementById("codeSelect").addEventListener("change", function(){
     });
 });
 </script>
+
+</body>
+</html>
