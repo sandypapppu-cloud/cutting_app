@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Program View</title>
+
+<style>
+body { font-family: Arial; }
+
+table { border-collapse: collapse; margin-bottom:15px; width:60%; }
+td, th { border:1px solid black; padding:6px; text-align:center; }
+
+.header {
+    background:orange;
+    font-weight:bold;
+    text-align:center;
+    padding:10px;
+}
+
+.pending { color:red; font-weight:bold; }
+.completed { color:green; font-weight:bold; }
+
+.print-btn {
+    margin:10px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2 class="header">CUTTING PROGRAM SHEET</h2>
+
+<h3>Program No: {{ data.program_no }}</h3>
+
+<h3>
+Status:
+<span class="{% if data.status == 'PENDING' %}pending{% else %}completed{% endif %}">
+{{ data.status }}
+</span>
+</h3>
+
+<!-- BASIC DETAILS -->
+<table>
+<tr><td>FABRIC</td><td>{{ data.fabric }}</td></tr>
+<tr><td>DIA</td><td>{{ data.dia }}</td></tr>
+<tr><td>TYPE</td><td>{{ data.ptype }}</td></tr>
+<tr><td>CODE</td><td>{{ data.code }}</td></tr>
+</table>
+
+<!-- SIZE TABLE -->
+<h3>SIZE DETAILS</h3>
+
+<table>
+<tr>
+{% for s in sizes %}
+<th>{{ s }}</th>
+{% endfor %}
+</tr>
+
+<tr>
+{% for r in ratios %}
+<td>{{ r }}</td>
+{% endfor %}
+</tr>
+</table>
+
+<!-- COLOUR TABLE -->
+<h3>COLOUR DETAILS</h3>
+
+<table>
+<tr>
+<th>COLOUR</th>
+<th>ROLLS</th>
+<th>STATUS</th>
+</tr>
+
+{% for c,r,s in colour_data %}
+<tr>
+<td>{{ c }}</td>
+<td>{{ r }}</td>
+<td>
+<span class="{% if s == 'PENDING' %}pending{% else %}completed{% endif %}">
+{{ s }}
+</span>
+</td>
+</tr>
+{% endfor %}
+</table>
+
+<button class="print-btn" onclick="window.print()">🖨 PRINT</button>
+
+<br><br>
+
+<a href="/">⬅ Back</a>
+
+</body>
+</html>
