@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report</title>
+</head>
+<body>
+
+<h2>PROGRAM REPORT</h2>
+
+<table border="1">
+<tr>
+<th>ID</th>
+<th>Program</th>
+<th>Fabric</th>
+<th>Colour</th>
+<th>Status</th>
+<th>Date</th>
+<th>Update Status</th>
+</tr>
+
+{% for row in data %}
+<tr>
+<td>{{row[0]}}</td>
+<td>{{row[1]}}</td>
+<td>{{row[2]}}</td>
+<td>{{row[6]}}</td>
+<td>{{row[10]}}</td>
+<td>{{row[11]}}</td>
+
+<td>
+<form method="POST" action="/status/{{row[0]}}">
+<select name="status" onchange="this.form.submit()">
+<option value="PENDING" {% if row[10]=='PENDING' %}selected{% endif %}>PENDING</option>
+<option value="PARTIAL" {% if row[10]=='PARTIAL' %}selected{% endif %}>PARTIAL</option>
+<option value="COMPLETED" {% if row[10]=='COMPLETED' %}selected{% endif %}>COMPLETED</option>
+</select>
+</form>
+</td>
+
+</tr>
+{% endfor %}
+</table>
+
+</body>
+</html>

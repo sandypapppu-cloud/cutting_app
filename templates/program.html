@@ -1,198 +1,56 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
-<title>Program View</title>
-
-<style>
-body { font-family: Arial; }
-
-table { border-collapse: collapse; margin-bottom:15px; width:60%; }
-td, th { border:1px solid black; padding:6px; text-align:center; }
-
-.header {
-    background:orange;
-    font-weight:bold;
-    text-align:center;
-    padding:10px;
-}
-
-.pending { color:red; font-weight:bold; }
-.completed { color:green; font-weight:bold; }
-
-.print-btn {
-    margin:10px 0;
-}
-
-</style>
-
+    <title>Program Sheet</title>
 </head>
-
 <body>
 
-<h2 class="header">CUTTING PROGRAM SHEET</h2>
+<h2>PROGRAM SHEET</h2>
 
-<h3>Program No: {{ data.program_no }}</h3>
+<form method="POST">
 
-<h3>
-Status:
-<span class="{% if data.status == 'PENDING' %}pending{% else %}completed{% endif %}">
-{{ data.status }}
-</span>
-</h3>
+Fabric: <input name="fabric" required><br><br>
+DIA: <input name="dia" required><br><br>
+Type: <input name="ptype" required><br><br>
+Code: <input name="code" required><br><br>
+Colour: <input name="colour" required><br><br>
+Size: <input name="size" required><br><br>
+Ratio: <input name="ratio" required><br><br>
+Roll: <input name="roll" required><br><br>
 
-<!-- BASIC DETAILS -->
-<table>
-<tr><td>FABRIC</td><td>{{ data.fabric }}</td></tr>
-<tr><td>DIA</td><td>{{ data.dia }}</td></tr>
-<tr><td>TYPE</td><td>{{ data.ptype }}</td></tr>
-<tr><td>CODE</td><td>{{ data.code }}</td></tr>
-</table>
+<button>Save</button>
 
-<!-- SIZE TABLE -->
-<h3>SIZE DETAILS</h3>
+</form>
 
-<table>
+<hr>
+
+<table border="1">
 <tr>
-{% for s in sizes %}
-<th>{{ s }}</th>
-{% endfor %}
+<th>ID</th>
+<th>Program</th>
+<th>Fabric</th>
+<th>Colour</th>
+<th>Status</th>
+<th>Date</th>
+<th>Action</th>
 </tr>
 
+{% for row in data %}
 <tr>
-{% for r in ratios %}
-<td>{{ r }}</td>
-{% endfor %}
-</tr>
-</table>
+<td>{{row[0]}}</td>
+<td>{{row[1]}}</td>
+<td>{{row[2]}}</td>
+<td>{{row[6]}}</td>
+<td>{{row[10]}}</td>
+<td>{{row[11]}}</td>
 
-<!-- COLOUR TABLE -->
-<h3>COLOUR DETAILS</h3>
-
-<table>
-<tr>
-<th>COLOUR</th>
-<th>ROLLS</th>
-<th>STATUS</th>
-</tr>
-
-{% for c,r,s in colour_data %}
-<tr>
-<td>{{ c }}</td>
-<td>{{ r }}</td>
 <td>
-<span class="{% if s == 'PENDING' %}pending{% else %}completed{% endif %}">
-{{ s }}
-</span>
+<a href="/delete/{{row[0]}}" onclick="return confirm('Delete this record?')">Delete</a>
 </td>
+
 </tr>
 {% endfor %}
 </table>
-
-<button class="print-btn" onclick="window.print()">🖨 PRINT</button>
-
-<br><br>
-
-<a href="/">⬅ Back</a>
 
 </body>
-=======
-<!DOCTYPE html>
-<html>
-<head>
-<title>Program View</title>
-
-<style>
-body { font-family: Arial; }
-
-table { border-collapse: collapse; margin-bottom:15px; width:60%; }
-td, th { border:1px solid black; padding:6px; text-align:center; }
-
-.header {
-    background:orange;
-    font-weight:bold;
-    text-align:center;
-    padding:10px;
-}
-
-.pending { color:red; font-weight:bold; }
-.completed { color:green; font-weight:bold; }
-
-.print-btn {
-    margin:10px 0;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<h2 class="header">CUTTING PROGRAM SHEET</h2>
-
-<h3>Program No: {{ data.program_no }}</h3>
-
-<h3>
-Status:
-<span class="{% if data.status == 'PENDING' %}pending{% else %}completed{% endif %}">
-{{ data.status }}
-</span>
-</h3>
-
-<!-- BASIC DETAILS -->
-<table>
-<tr><td>FABRIC</td><td>{{ data.fabric }}</td></tr>
-<tr><td>DIA</td><td>{{ data.dia }}</td></tr>
-<tr><td>TYPE</td><td>{{ data.ptype }}</td></tr>
-<tr><td>CODE</td><td>{{ data.code }}</td></tr>
-</table>
-
-<!-- SIZE TABLE -->
-<h3>SIZE DETAILS</h3>
-
-<table>
-<tr>
-{% for s in sizes %}
-<th>{{ s }}</th>
-{% endfor %}
-</tr>
-
-<tr>
-{% for r in ratios %}
-<td>{{ r }}</td>
-{% endfor %}
-</tr>
-</table>
-
-<!-- COLOUR TABLE -->
-<h3>COLOUR DETAILS</h3>
-
-<table>
-<tr>
-<th>COLOUR</th>
-<th>ROLLS</th>
-<th>STATUS</th>
-</tr>
-
-{% for c,r,s in colour_data %}
-<tr>
-<td>{{ c }}</td>
-<td>{{ r }}</td>
-<td>
-<span class="{% if s == 'PENDING' %}pending{% else %}completed{% endif %}">
-{{ s }}
-</span>
-</td>
-</tr>
-{% endfor %}
-</table>
-
-<button class="print-btn" onclick="window.print()">🖨 PRINT</button>
-
-<br><br>
-
-<a href="/">⬅ Back</a>
-
-</body>
->>>>>>> 2b7f2534638bcddfc36075380d1e1b62ad6f64de
 </html>
