@@ -1,27 +1,38 @@
 <h2>MASTER</h2>
 
-<h3>Fabric</h3>
-<form method="POST" action="/add_fabric">
-<input name="fabric" placeholder="Fabric">
-<input name="gsm" placeholder="GSM">
-<input name="dia" placeholder="DIA">
+<h3>Add Master</h3>
+
+<form method="POST">
+<select name="type">
+<option value="fabric_master">Fabric</option>
+<option value="size_master">Size</option>
+<option value="colour_master">Colour</option>
+</select>
+
+<input name="name">
 <button>Add</button>
 </form>
 
-<h3>Type</h3>
-<form method="POST" action="/add_type">
-<input name="type">
-<button>Add</button>
-</form>
+<hr>
 
-<h3>Color</h3>
-<form method="POST" action="/add_color">
-<input name="color">
-<button>Add</button>
-</form>
+<h3>CODE MASTER</h3>
 
-<h3>Size</h3>
-<form method="POST" action="/add_size">
-<input name="size">
-<button>Add</button>
+<form method="POST" action="/add_code">
+
+Code: <input name="code"><br><br>
+
+Fabric: <input name="fabric"><br><br>
+
+GSM: <input name="gsm"><br><br>
+
+DIA: <input name="dia"><br><br>
+
+Type: <input name="ptype"><br><br>
+
+Sizes (S,M,L): <input name="sizes"><br><br>
+
+Colours (RED,BLUE): <input name="colours"><br><br>
+
+<button>Add Code</button>
+
 </form>

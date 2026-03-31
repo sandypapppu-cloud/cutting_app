@@ -1,22 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Program Sheet</title>
-</head>
-<body>
-
-<h2>PROGRAM SHEET</h2>
+<h2>CUTTING PROGRAM SHEET</h2>
 
 <form method="POST">
 
-Fabric: <input name="fabric" required><br><br>
-DIA: <input name="dia" required><br><br>
-Type: <input name="ptype" required><br><br>
-Code: <input name="code" required><br><br>
-Colour: <input name="colour" required><br><br>
-Size: <input name="size" required><br><br>
-Ratio: <input name="ratio" required><br><br>
-Roll: <input name="roll" required><br><br>
+Code:
+<select name="code" id="codeSelect">
+{% for c in codes %}
+<option value="{{c}}">{{c}}</option>
+{% endfor %}
+</select><br><br>
+
+Fabric: <input name="fabric"><br><br>
+DIA: <input name="dia"><br><br>
+Type: <input name="ptype"><br><br>
+
+Colour: <input name="colour"><br><br>
+Size: <input name="size"><br><br>
+Ratio: <input name="ratio"><br><br>
+Roll: <input name="roll"><br><br>
 
 <button>Save</button>
 
@@ -24,14 +24,16 @@ Roll: <input name="roll" required><br><br>
 
 <hr>
 
+<h3>PROGRAM LIST</h3>
+
 <table border="1">
 <tr>
 <th>ID</th>
 <th>Program</th>
 <th>Fabric</th>
 <th>Colour</th>
+<th>Size</th>
 <th>Status</th>
-<th>Date</th>
 <th>Action</th>
 </tr>
 
@@ -41,16 +43,22 @@ Roll: <input name="roll" required><br><br>
 <td>{{row[1]}}</td>
 <td>{{row[2]}}</td>
 <td>{{row[6]}}</td>
+<td>{{row[7]}}</td>
 <td>{{row[10]}}</td>
-<td>{{row[11]}}</td>
-
 <td>
-<a href="/delete/{{row[0]}}" onclick="return confirm('Delete this record?')">Delete</a>
+<a href="/delete/{{row[0]}}">Delete</a>
 </td>
-
 </tr>
 {% endfor %}
 </table>
 
-</body>
-</html>
+<script>
+document.getElementById("codeSelect").addEventListener("change", function(){
+    fetch("/get_code/"+this.value)
+    .then(res=>res.json())
+    .then(data=>{
+        document.getElementsByName("fabric")[0].value = data.fabric;
+        document.getElementsByName("dia")[0].value = data.dia;
+    });
+});
+</script>
