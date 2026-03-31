@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 flask
 pandas
 openpyxl
 gunicorn
+=======
+flask
+pandas
+openpyxl
+gunicorn
+>>>>>>> 2b7f2534638bcddfc36075380d1e1b62ad6f64de
 psycopg2-binary
